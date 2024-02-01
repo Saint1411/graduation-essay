@@ -1,6 +1,6 @@
 def load_data():
     # Hàm này trả về một danh sách các bộ dữ liệu mẫu
-    '''return [
+    return [
         [1, 7, 8],
         [1, 2, 6, 7, 8],
         [1, 2, 6, 7],
@@ -15,7 +15,9 @@ def load_data():
         ['a', 'b', 'g'],
         ['b', 'c', 'd', 'e', 'g'],
         ['a', 'c', 'e', 'f']
+        
     ]
+    '''
     
 def create_candidates(prev_candidates, k):
     candidates = []
@@ -66,11 +68,45 @@ def apriori(dataset, min_support):
 
     return frequent_itemsets
 
+#==================================
+from itertools import chain, combinations
+
+def powerset(s):
+    return list(chain.from_iterable(combinations(s, r) for r in range(1, len(s) + 1)))
+
+def generate_frequent_strong_rules(frequent_itemsets, min_confidence, dataset):
+    strong_rules = []# set()
+
+    for itemset, support in frequent_itemsets:
+        subsets = powerset(itemset)
+        print(subsets)
+        for antecedent in subsets:
+            consequent = set(itemset) - set(antecedent)
+            if not consequent: continue
+            confidence = calculate_confidence(itemset, antecedent, dataset)
+
+            if confidence >= min_confidence:
+                strong_rules.append((antecedent,consequent))#((frozenset(antecedent), frozenset(consequent)))
+
+    return strong_rules
+
+def calculate_confidence(itemset, antecedent, dataset):
+    # Assume some function to calculate support for itemset, antecedent, and consequent
+    support_itemset = support_count(dataset, itemset )
+    support_antecedent = support_count(dataset, antecedent)
+    return support_itemset / support_antecedent
+#==================================
 if __name__ == "__main__":
     dataset = load_data()
-    min_support = 0.6
+    min_support = 0.3
     frequent_itemsets = apriori(dataset, min_support)
 
     print("Frequent itemsets with minimum support count of", min_support)
     for itemset, support in frequent_itemsets:
         print(itemset, ":", support)
+
+    
+    min_confidence = 0.6
+    strong_rules= generate_frequent_strong_rules(frequent_itemsets, min_confidence, dataset)
+    for antecedent, consequent in strong_rules:
+        print(antecedent, "->", consequent)
