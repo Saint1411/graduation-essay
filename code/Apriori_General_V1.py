@@ -1,23 +1,26 @@
-def load_data():
-    # Hàm này trả về một danh sách các bộ dữ liệu mẫu
-    return [
-        [1, 7, 8],
-        [1, 2, 6, 7, 8],
-        [1, 2, 6, 7],
-        [1, 7, 8],
-        [3, 4, 5, 6, 8],
-        [1, 4, 5]
-    ]
-    '''
-    return [
-        ['a', 'b', 'e', 'g'],
-        ['a', 'c', 'd', 'f'],
-        ['a', 'b', 'g'],
-        ['b', 'c', 'd', 'e', 'g'],
-        ['a', 'c', 'e', 'f']
-        
-    ]
-    '''
+def load_data(file_path):
+    data = []
+    with open(file_path, "r") as f:
+        for line in f.readlines():
+            string_list = line.strip().split(', ')
+            data.append([int(num) for num in string_list])
+    return data
+
+    # return [
+    #     [1, 7, 8],
+    #     [1, 2, 6, 7, 8],
+    #     [1, 2, 6, 7],
+    #     [1, 7, 8],
+    #     [3, 4, 5, 6, 8],
+    #     [1, 4, 5]
+    # ]
+    # return [
+    #     ['a', 'b', 'e', 'g'],
+    #     ['a', 'c', 'd', 'f'],
+    #     ['a', 'b', 'g'],
+    #     ['b', 'c', 'd', 'e', 'g'],
+    #     ['a', 'c', 'e', 'f'] 
+    # ]
     
 def create_candidates(prev_candidates, k):
     candidates = []
@@ -68,7 +71,7 @@ def apriori(dataset, min_support):
 
     return frequent_itemsets
 
-#==================================
+#=====================================================
 from itertools import chain, combinations
 
 def powerset(s):
@@ -95,9 +98,17 @@ def calculate_confidence(itemset, antecedent, dataset):
     support_itemset = support_count(dataset, itemset )
     support_antecedent = support_count(dataset, antecedent)
     return support_itemset / support_antecedent
-#==================================
+
 if __name__ == "__main__":
-    dataset = load_data()
+    # dataset = [
+    #     [1, 7, 8],
+    #     [1, 2, 6, 7, 8],
+    #     [1, 2, 6, 7],
+    #     [1, 7, 8],
+    #     [3, 4, 5, 6, 8],
+    #     [1, 4, 5]
+    # ]
+    dataset = load_data("dataset.txt")
     min_support = 0.3
     frequent_itemsets = apriori(dataset, min_support)
 
@@ -110,3 +121,4 @@ if __name__ == "__main__":
     strong_rules= generate_frequent_strong_rules(frequent_itemsets, min_confidence, dataset)
     for antecedent, consequent in strong_rules:
         print(antecedent, "->", consequent)
+
