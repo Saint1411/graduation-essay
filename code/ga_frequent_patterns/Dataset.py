@@ -1,52 +1,54 @@
-from Transaction import Transaction
-class Dataset:
-    def __init__(self, datasetPath):
+class CDataset:
+    def __init__(self, dataset_path):
         self.transactions = []
-        self.maxItem = 0
-        self.maxNum = 0
-        with open(datasetPath) as f:
+        self.max_item = 0
+        self.max_num = 0
+
+        with open(dataset_path) as f:
             for line in f:
-                if line=="" or line[0] == '#' or line[0] == '%' or line[0] == '@':
+                if line in ["''", "#", "%", "@"]:
                     continue
-                t = self.createTransaction(line)
-                if len(t)>self.maxItem: self.maxItem = len(t)
+
+                t = self.create_transaction(line)
+                if len(t) > self.max_item: 
+                    
+                    self.max_item = len(t)
+
                 self.transactions.append(t)
 
-    def createTransaction(self, line):
-        itemsString = line.split(' ')
-        #print(itemsString)
+    def create_transaction(self, line):
+        items_string = line.split(" ")
+
         items = []
-        for i in range(len(itemsString)):
-            if itemsString[i]!='\n':
-                tmp = itemsString[i].splitlines()
+        for i in range(len(items_string)):
+            if items_string[i] != '\n':
+                tmp = items_string[i].splitlines()
                 #print(tmp)
-                if len(tmp)==0: continue
+
+                if len(tmp) == 0: 
+                    continue
+
                 n = int(tmp[0])
-                if n>self.maxNum: self.maxNum=n
+
+                if n > self.max_num: 
+                    self.max_num = n
+                    
                 items.append(n)
                 
         return items
 
-    def getTransactions(self):
+    @property
+    def get_transactions(self):
         return self.transactions
-    def getMaxItem(self):
-        return self.maxItem
-    def getMaxNum(self):
-        return self.maxNum
+    
+    @property
+    def get_max_item(self):
+        return self.max_item
+    
+    @property
+    def get_max_num(self):
+        return self.max_num
     
 
-if __name__ == '__main__':
-    dataset = "mushroom.txt";
-    db = Dataset(dataset);
-    #for i in db.getTransactions():
-    #    print(i)
-    print(db.getTransactions())
+if __name__ == "__main__":
     print('Done..!')
-
-
-
-
-
-
-
-    

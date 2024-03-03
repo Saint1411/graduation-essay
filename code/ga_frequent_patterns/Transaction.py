@@ -1,26 +1,26 @@
-class Transaction:
-    temItems = []
-    tempUtilities = []
-
+class CTransaction:
     
-    
-    def __init__(self, items, utilities, transactionUtility):
+    def __init__(self, items, utilities, transaction_utility):
         self.items = items
         self.utilities = utilities
-        self.transactionUtility = transactionUtility
+        self.transaction_utility = transaction_utility
         self.offset = 0
-        self.prefixUtility = 0
+        self.prefix_utility = 0
 
-    def getItems(self):
+    def __str__(self) -> str:
+        return f"{self.items} : {self.transaction_utility} : {self.utilities}"
+
+    @property
+    def get_transaction_utility(self):
+        return self.transaction_utility
+    
+    @property
+    def get_utilities(self):
+        return self.utilities
+    
+    @property
+    def get_items(self):
         return self.items
 
-    def getUtilities(self):
-        return self.utilities
-
-    def getUtility(self):
-        return self.transactionUtility
-    def Print(self):
-        print(self.items,":",self.transactionUtility,":",self.utilities)
-
-if __name__ == '__main__':
-    t = Transaction(0,0,0)
+if __name__ == "__main__":
+    t = CTransaction(0,0,0)
