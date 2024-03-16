@@ -84,6 +84,8 @@ class AlgoHUIMGA:
                         self.map_item_to_twu[item] = twu
                         self.map_item_to_twu0[item] = twu0
 
+        print("xong lan 1")
+
         with open(input_path, "r") as file:
             for line in file:
                 line = line.strip()
@@ -104,6 +106,7 @@ class AlgoHUIMGA:
                             self.map_item_to_twu0.pop(pair.item, None)
 
                     self.database.append(revised_transaction)
+        print("xong lan 2")
 
         self.twu_pattern = sorted(list(self.map_item_to_twu0.keys()))
 
@@ -115,14 +118,14 @@ class AlgoHUIMGA:
             self.generate_population(min_utility)
 
             for i in range(self.generations):
-                self.percentage = self.roulette_percent()
+                self.percentage = 0.8   #self.roulette_percent()
                 self.calculate_r_fitness()
                 while len(self.sub_population) < self.pop_size:
-                    temp_1 = self.select_chromosome()
-                    temp_2 = self.select_chromosome()
+                    temp_1, temp_2 = self.select_chromosome()
+                    # temp_2 = self.select_chromosome()
 
-                    while temp_1 == temp_2:
-                        temp_2 = self.select_chromosome()
+                    # while temp_1 == temp_2:
+                    #     temp_2 = self.select_chromosome()
 
                     self.crossover(temp_1, temp_2, min_utility)
 
@@ -154,14 +157,16 @@ class AlgoHUIMGA:
             temp_node = ChromosomeNode(len(self.twu_pattern))
             k = random.randint(0, len(self.twu_pattern))
             for j in range(k):
-                temp = select(self.percentage)
+                temp = select(self.percentage) or 0
                 if temp_node.chromosome[temp] == 0:
                     temp_node.chromosome[temp] = 1
 
             temp_node.fitness = self.fit_calculate(temp_node.chromosome, k)
             temp_node.rank = 0
-            self.population.append(temp_node)
+            # print(temp_node.chromosome, ":", temp_node.fitness)
+            # self.population.append(temp_node)
             if temp_node.fitness >= min_utility:
+                self.population.append(temp_node)
                 self.insert(temp_node)
             i += 1
 
@@ -307,16 +312,23 @@ class AlgoHUIMGA:
         temp_sum = 0
         for node in self.population:
             temp_sum += node.fitness
-            node.rfitness = temp_sum / total_sum
+            node.r_fitness = temp_sum / total_sum
 
     def select_chromosome(self):
-        rand_num = random.random()
-        for i, node in enumerate(self.population):
-            if i == 0:
-                if 0 <= rand_num <= node.rfitness:
-                    return i
-            elif self.population[i - 1].rfitness < rand_num <= node.rfitness:
-                return i
+        length = len(self.population)
+        half_length = length // 2
+
+        parent_1_index = random.randint(0, half_length - 1)
+        parent_2_index = random.randint(half_length, length - 1)
+        # parent_1 = self.population[parent_1_index]
+        # parent_2 = self.population[parent_2_index]
+        return parent_1_index, parent_2_index
+        # for i, node in enumerate(self.population):
+        #     if i == 0:
+        #         if 0 <= rand_num <= node.r_fitness:
+        #             return i
+        #     elif self.population[i - 1].r_fitness < rand_num <= node.r_fitness:
+        #         return i
 
     def write_out(self):
         buffer = []
@@ -339,14 +351,17 @@ class AlgoHUIMGA:
 
 
 if __name__ == "__main__":
-    input_file = "db_utility.txt"
+    input_file = "store_chain.txt"
     output_file = "output_ga.txt"
-    min_utility = 20
+    min_utility = 60000
 
+    print("Doing")
     algo = AlgoHUIMGA()
     algo.run_algorithm(input_file, output_file, min_utility)
+
     # db = algo.database
     # for data in db:
     #     for pair in data:
     #         print(f"{pair.item}: {pair.utility}")
-    algo.print_result(output_file)
+    algo.print_result()
+    print("Done")
