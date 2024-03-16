@@ -1,7 +1,7 @@
-DATASET_FILE = "./datasets/mushroom.txt"
+DATASET_FILE = "./datasets/test_dataset.txt"
 MIN_SUPPORT = 0.06  # Độ hỗ trợ
 CONFIDENCE = 0.5  # Độ tin cậy
-MIN_S = 0.25  # Min support
+MIN_S = 0.3  # Min support
 SUPPORT_COUNT = MIN_S  # Độ hỗ trợ
 BATCH = 500
 POPULATION_SIZE = 100  # Số lượng

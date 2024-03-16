@@ -205,7 +205,6 @@ def genetic_algorithms(
         selected_parents = select(population, fitness_scores, support_count)
 
         next_generation = copy_population(selected_parents)
-        print(next_generation[0])
 
         while len(next_generation) < population_size:
             parent1, parent2 = random_selected(selected_parents)
@@ -217,51 +216,17 @@ def genetic_algorithms(
                 next_generation.append(child2)
 
         # Đột biến ngẫu nhiên
-        print("next_generation before: ", next_generation[0])
         for individual in next_generation:
             if random.random() < mutation_probability:
                 mutate(individual)
-
-        print("next_generation after: ", next_generation[0])
         # Cập nhật quần thể mới
         population = copy_population(next_generation)
-        print(population[0])
 
     frequent_item_sets = find_frequent_item_sets(
         population, dataset, support_count, item_candidate
     )
 
     return frequent_item_sets
-
-
-# Thuật toán chính
-def ga_slide(
-    generations,
-    transactions,
-    dataset,
-    population_size,
-    support_count,
-    batch,
-    crossover_probability,
-    mutation_probability,
-):
-
-    all_frequent_item_sets = []
-
-    for _ in range(0, len(transactions), batch):
-        # window_data = transactions[i:i+window_size]
-        frequent_item_sets = genetic_algorithms(
-            generations,
-            population_size,
-            dataset,
-            support_count,
-            crossover_probability,
-            mutation_probability,
-        )
-
-        all_frequent_item_sets.extend(frequent_item_sets)
-
-    return all_frequent_item_sets
 
 
 if __name__ == "__main__":
@@ -274,9 +239,8 @@ if __name__ == "__main__":
         CROSSOVER_PROBABILITY,
         MUTATION_PROBABILITY,
     )
-    #
-    # print(all_frequent_item_sets[0])
-    # print(all_frequent_item_sets[-1])
-    # print(len(all_frequent_item_sets))
+    
+
+    print(all_frequent_item_sets)
 
 

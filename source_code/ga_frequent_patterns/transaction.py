@@ -25,3 +25,4 @@ class CTransaction:
 
 if __name__ == "__main__":
     t = CTransaction(0, 0, 0)
+    print(t)

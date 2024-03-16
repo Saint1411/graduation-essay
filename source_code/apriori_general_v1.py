@@ -80,7 +80,7 @@ def powerset(s):
 def generate_frequent_strong_rules(frequent_itemsets, min_confidence, dataset):
     strong_rules = []# set()
 
-    for itemset, support in frequent_itemsets:
+    for itemset, _ in frequent_itemsets:
         subsets = powerset(itemset)
         print(subsets)
         for antecedent in subsets:
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     #     [3, 4, 5, 6, 8],
     #     [1, 4, 5]
     # ]
-    dataset = load_data("dataset.txt")
+    dataset = load_data("./ga_frequent_patterns/datasets/test_dataset.txt")
     min_support = 0.3
     frequent_itemsets = apriori(dataset, min_support)
 

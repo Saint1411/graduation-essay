@@ -6,7 +6,7 @@ class CDataset:
 
         with open(dataset_path) as f:
             for line in f:
-                if line.strip() in ["", "#", "%", "@"]:
+                if line.strip() in [" ", "#", "%", "@", "\n"]:
                     continue
 
                 t = self.create_transaction(line)
